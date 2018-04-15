@@ -1,11 +1,12 @@
 package language.ENG.lib;
 
 public class Dictionary {
-	private Word[] words = getWords();
-	
+	private Word[] wordsFull = getWords();
+	private String[] wordString; //
 	
 	private static Word[] getWords() {
 		//get all the words from a file
+		//fill wordString too
 		return null;
 	}
 	
