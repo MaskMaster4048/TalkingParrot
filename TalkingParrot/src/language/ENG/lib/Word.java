@@ -1,6 +1,6 @@
 package language.ENG.lib;
 
-public abstract class Word {
+abstract class Word {
 	/*
 	 * order: 
 	 * 
