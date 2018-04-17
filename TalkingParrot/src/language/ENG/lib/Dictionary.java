@@ -14,6 +14,6 @@ public class Dictionary {
 	}
 	
 	public static void rewriteWords() {
-		//recreate the file with all the words in it
+		JSONArray total = new JSONArray();
 	}
 }
