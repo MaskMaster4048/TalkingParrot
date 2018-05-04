@@ -8,12 +8,15 @@ public class Dictionary {
 	private Map<String, Integer> wordStr = new HashMap<String, Integer>();
 	
 	private static Word[] getWords() {
-		//get all the words from a file
-		//fill wordString too
+		//TODO make jsoncreator
 		return null;
 	}
 	
+	private Map<String, Integer> getWordStr(){
+		//TODO go through the list of wordsFull and get the actual word for each one
+	}
+	
 	public static void rewriteWords() {
-		JSONArray total = new JSONArray();
+		//TODO make jsoncreator
 	}
 }
