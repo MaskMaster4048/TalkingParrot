@@ -127,12 +127,4 @@ public class JsonObject {
 	public void setValue(String value) {
 		this.value = value;
 	}
-	
-	/**
-	 * 
-	 * @return all the children of this object; returns null if there are none.
-	 */
-	public JsonObject[] getChildren() {
-		return null;
-	}
 }

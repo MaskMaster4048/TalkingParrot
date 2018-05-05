@@ -1,5 +1,6 @@
 package external.jsoncreator;
 
+//TODO replace all "super(t, null);" with "super(t, Json.getStringFromList(l));"
 public class JsonArray extends JsonObject{
 	private JsonObject[] list;
 	
@@ -10,7 +11,7 @@ public class JsonArray extends JsonObject{
 	 * @param l List of children in the object
 	 */
 	public JsonArray(String t, String v, JsonObject[] l) {
-		super(t, v);
+		super(t, null);
 		list = l;
 	}
 	
@@ -21,7 +22,7 @@ public class JsonArray extends JsonObject{
 	 * @param l List of children in the object
 	 */
 	public JsonArray(String t, int v, JsonObject[] l) {
-		super(t, v);
+		super(t, null);
 		list = l;
 	}
 	
@@ -32,7 +33,7 @@ public class JsonArray extends JsonObject{
 	 * @param l List of children in the object
 	 */
 	public JsonArray(String t, double v, JsonObject[] l) {
-		super(t, v);
+		super(t, null);
 		list = l;
 	}
 	
@@ -43,7 +44,7 @@ public class JsonArray extends JsonObject{
 	 * @param l List of children in the object
 	 */
 	public JsonArray(String t, float v, JsonObject[] l) {
-		super(t, v);
+		super(t, null);
 		list = l;
 	}
 	
@@ -54,7 +55,7 @@ public class JsonArray extends JsonObject{
 	 * @param l List of children in the object
 	 */
 	public JsonArray(String t, long v, JsonObject[] l) {
-		super(t, v);
+		super(t, null);
 		list = l;
 	}
 	
@@ -65,7 +66,7 @@ public class JsonArray extends JsonObject{
 	 * @param l List of children in the object
 	 */
 	public JsonArray(String t, short v, JsonObject[] l) {
-		super(t, v);
+		super(t, null);
 		list = l;
 	}
 	
@@ -76,7 +77,7 @@ public class JsonArray extends JsonObject{
 	 * @param l List of children in the object
 	 */
 	public JsonArray(String t, char v, JsonObject[] l) {
-		super(t, v);
+		super(t, null);
 		list = l;
 	}
 	
@@ -87,7 +88,7 @@ public class JsonArray extends JsonObject{
 	 * @param l List of children in the object
 	 */
 	public JsonArray(String t, byte v, JsonObject[] l) {
-		super(t, v);
+		super(t, null);
 		list = l;
 	}
 	
@@ -98,7 +99,7 @@ public class JsonArray extends JsonObject{
 	 * @param l List of children in the object
 	 */
 	public JsonArray(String t, boolean v, JsonObject[] l) {
-		super(t, v);
+		super(t, null);
 		list = l;
 	}
 
@@ -106,7 +107,7 @@ public class JsonArray extends JsonObject{
 	/**
 	 * @return the list
 	 */
-	public JsonObject[] getList() {
+	public JsonObject[] get() {
 		return list;
 	}
 
@@ -127,10 +128,5 @@ public class JsonArray extends JsonObject{
 		list = new JsonObject[oldList.length+1];
 		System.arraycopy(oldList, 0, list, 0, oldList.length);
 		list[oldList.length] = j;
-	}
-	
-	public JsonObject[] getChildren() {
-		if (list == null) return null;
-		return list;
 	}
 }
