@@ -14,6 +14,7 @@ public class Dictionary {
 	
 	private Map<String, Integer> getWordStr(){
 		//TODO go through the list of wordsFull and get the actual word for each one
+		return null;
 	}
 	
 	public static void rewriteWords() {
