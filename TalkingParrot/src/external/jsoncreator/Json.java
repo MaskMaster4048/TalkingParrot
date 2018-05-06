@@ -43,11 +43,20 @@ public class Json{
 		String out = "{\n";
 		for (int i=0; i<list.length-1; i++) {//saves the last one, because the format is different (no comma)
 			out = out+spacing+"\""+list[i].getTitle()+"\": "+((list[i].getValue().substring(0, 1).equals("{"))?
-					list[i].getValue():"\""+list[i].getValue()+"\"")+",\n";
+					addSpacing(list[i].getValue()):"\""+list[i].getValue()+"\"")+",\n";
 		}
 		out = out+spacing+"\""+list[list.length-1].getTitle()+"\": "+((list[list.length-1].getValue().substring(0, 1)
-				.equals("{"))? list[list.length-1].getValue():"\""+list[list.length-1].getValue()+"\"")+"\n}";
+				.equals("{"))? addSpacing(list[list.length-1].getValue()):"\""+list[list.length-1].getValue()+"\"")+"\n}";
 		return out;
+	}
+	
+	/**
+	 * "tabs" out a multi-line string
+	 * @param value the String to be spaced
+	 * @return the spaced String
+	 */
+	private static String addSpacing(String value) {
+		return value.replace("\n", "\n"+spacing);
 	}
 	
 	/**
