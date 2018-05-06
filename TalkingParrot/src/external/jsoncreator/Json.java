@@ -6,20 +6,40 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Perhaps what you could call "the control panel" of the Json library. This is where the file is written, where text is
+ * produced, et cetera.
+ * @author Logan Plumlee
+ * @since 2018-5-6
+ */
 public class Json{
 	private File file;
 	private ArrayList<JsonObject> objects = new ArrayList<JsonObject>();
 	private final static String spacing = "    ";
 	
+	/**
+	 * creating the Json file
+	 * @param f The file to be written/read
+	 */
 	public Json(File f) {
 		file = f;
 	}
 	
+	/**
+	 * adds a JsonObject into the "uncompiled" list of items
+	 * @param j The JsonObject to be added
+	 */
 	public void add(JsonObject j) {
 		objects.add(j);
 	}
 	
-	public static String getFileFromList(JsonObject[] list) {
+	/**
+	 * Gets a JsonObject[] and turns it into a string representing how it would be laid out like in a Json file
+	 * used before writing the file
+	 * @param list the list of JsonObjects
+	 * @return A string representing a Json file
+	 */
+	protected static String getFileFromList(JsonObject[] list) {
 		String out = "{\n";
 		for (int i=0; i<list.length-1; i++) {//saves the last one, because the format is different (no comma)
 			out = out+spacing+"\""+list[i].getTitle()+"\": "+((list[i].getValue().substring(0, 1)=="{")?
@@ -30,6 +50,12 @@ public class Json{
 		return out;
 	}
 	
+	/**
+	 * Gets a JsonObject list from a string in Json file format
+	 * @param s The string in Json file format
+	 * @return A JsonObject list
+	 * @throws NotAJsonFileException Thrown if the string is not in Json file format
+	 */
 	public static JsonObject[] getListFromString(String s) throws NotAJsonFileException {
 		ArrayList<JsonObject> array = new ArrayList<JsonObject>();
 		short WSPC = (short) spacing.length(); //the amount of white
@@ -69,6 +95,10 @@ public class Json{
 		return array.toArray(j);
 	}
 	
+	/**
+	 * Writes to the given file
+	 * @throws FileNotFoundException if the file given is not found
+	 */
 	public void WriteToFile() throws FileNotFoundException {
 		PrintWriter out = new PrintWriter(file);
 		JsonObject[] list = new JsonObject[objects.size()];

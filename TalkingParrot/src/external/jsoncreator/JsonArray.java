@@ -1,5 +1,11 @@
 package external.jsoncreator;
 
+/**
+ * A JsonObject that holds a list of other JsonObjects
+ * @author Logan Plumlee
+ * @since 2018-5-3
+ *
+ */
 public class JsonArray extends JsonObject{
 	private JsonObject[] list;
 	
