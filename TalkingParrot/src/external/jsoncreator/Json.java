@@ -42,11 +42,11 @@ public class Json{
 	protected static String getFileFromList(JsonObject[] list) {
 		String out = "{\n";
 		for (int i=0; i<list.length-1; i++) {//saves the last one, because the format is different (no comma)
-			out = out+spacing+"\""+list[i].getTitle()+"\": "+((list[i].getValue().substring(0, 1)=="{")?
+			out = out+spacing+"\""+list[i].getTitle()+"\": "+((list[i].getValue().substring(0, 1).equals("{"))?
 					list[i].getValue():"\""+list[i].getValue()+"\"")+",\n";
 		}
-		out = out+spacing+"\""+list[list.length-1].getTitle()+"\": "+((list[list.length-1].getValue().substring(0, 1)=="{")?
-				list[list.length-1].getValue():"\""+list[list.length-1].getValue()+"\"")+"\n}";
+		out = out+spacing+"\""+list[list.length-1].getTitle()+"\": "+((list[list.length-1].getValue().substring(0, 1)
+				.equals("{"))? list[list.length-1].getValue():"\""+list[list.length-1].getValue()+"\"")+"\n}";
 		return out;
 	}
 	
