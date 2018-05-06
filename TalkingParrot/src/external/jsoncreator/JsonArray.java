@@ -15,99 +15,10 @@ public class JsonArray extends JsonObject{
 	 * @param v Value of the object
 	 * @param l List of children in the object
 	 */
-	public JsonArray(String t, String v, JsonObject[] l) {
+	public JsonArray(String t, JsonObject[] l) {
 		super(t, Json.getFileFromList(l));
 		list = l;
 	}
-	
-	/**
-	 * Creates a JsonArray
-	 * @param t Title of the object
-	 * @param v Value of the object
-	 * @param l List of children in the object
-	 */
-	public JsonArray(String t, int v, JsonObject[] l) {
-		super(t, Json.getFileFromList(l));
-		list = l;
-	}
-	
-	/**
-	 * Creates a JsonArray
-	 * @param t Title of the object
-	 * @param v Value of the object
-	 * @param l List of children in the object
-	 */
-	public JsonArray(String t, double v, JsonObject[] l) {
-		super(t, Json.getFileFromList(l));
-		list = l;
-	}
-	
-	/**
-	 * Creates a JsonArray
-	 * @param t Title of the object
-	 * @param v Value of the object
-	 * @param l List of children in the object
-	 */
-	public JsonArray(String t, float v, JsonObject[] l) {
-		super(t, Json.getFileFromList(l));
-		list = l;
-	}
-	
-	/**
-	 * Creates a JsonArray
-	 * @param t Title of the object
-	 * @param v Value of the object
-	 * @param l List of children in the object
-	 */
-	public JsonArray(String t, long v, JsonObject[] l) {
-		super(t, Json.getFileFromList(l));
-		list = l;
-	}
-	
-	/**
-	 * Creates a JsonArray
-	 * @param t Title of the object
-	 * @param v Value of the object
-	 * @param l List of children in the object
-	 */
-	public JsonArray(String t, short v, JsonObject[] l) {
-		super(t, Json.getFileFromList(l));
-		list = l;
-	}
-	
-	/**
-	 * Creates a JsonArray
-	 * @param t Title of the object
-	 * @param v Value of the object
-	 * @param l List of children in the object
-	 */
-	public JsonArray(String t, char v, JsonObject[] l) {
-		super(t, Json.getFileFromList(l));
-		list = l;
-	}
-	
-	/**
-	 * Creates a JsonArray
-	 * @param t Title of the object
-	 * @param v Value of the object
-	 * @param l List of children in the object
-	 */
-	public JsonArray(String t, byte v, JsonObject[] l) {
-		super(t, Json.getFileFromList(l));
-		list = l;
-	}
-	
-	/**
-	 * Creates a JsonArray
-	 * @param t Title of the object
-	 * @param v Value of the object
-	 * @param l List of children in the object
-	 */
-	public JsonArray(String t, boolean v, JsonObject[] l) {
-		super(t, Json.getFileFromList(l));
-		list = l;
-	}
-
 
 	/**
 	 * @return the list
@@ -115,7 +26,6 @@ public class JsonArray extends JsonObject{
 	public JsonObject[] get() {
 		return list;
 	}
-
 
 	/**
 	 * @param list The list to set
