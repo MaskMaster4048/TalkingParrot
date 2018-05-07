@@ -30,6 +30,13 @@ public class TestingControl {
 			e1.printStackTrace();
 		}
 		System.out.println("It worked so far..");
+		
+		JsonObject[] j = null;
+		try {
+			j = new Json(f).getObjects();
+		} catch (NotAJsonFileException e1) {
+			e1.printStackTrace();
 		}
-
+		for (JsonObject jo : j) System.out.println(jo.getValue()+"\n");
+	}
 }

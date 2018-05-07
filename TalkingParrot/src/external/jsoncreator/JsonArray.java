@@ -19,6 +19,15 @@ public class JsonArray extends JsonObject{
 		super(t, Json.getFileFromList(l));
 		list = l;
 	}
+	
+	protected JsonArray(String t, String v) {
+		super(t,v);
+		try {
+			list = Json.getListFromString(v);
+		} catch (NotAJsonFileException e) {
+			e.printStackTrace();
+		}
+	}
 
 	/**
 	 * @return the list
