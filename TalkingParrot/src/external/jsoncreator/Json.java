@@ -2,7 +2,9 @@ package external.jsoncreator;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -23,6 +25,13 @@ public class Json{
 	 */
 	public Json(File f) {
 		file = f;
+		try {
+			JsonObject[] listObj = getObjects();
+			for (JsonObject j : listObj) objects.add(j);
+		} catch (NotAJsonFileException e) {
+			clearFile();
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -42,12 +51,43 @@ public class Json{
 	protected static String getFileFromList(JsonObject[] list) {
 		String out = "{\n";
 		for (int i=0; i<list.length-1; i++) {//saves the last one, because the format is different (no comma)
-			out = out+spacing+"\""+list[i].getTitle()+"\": "+((list[i].getValue().substring(0, 1)=="{")?
-					list[i].getValue():"\""+list[i].getValue()+"\"")+",\n";
+			out = out+spacing+"\""+list[i].getTitle()+"\": "+((list[i].getValue().substring(0, 1).equals("{"))?
+					addSpacing(list[i].getValue()):"\""+list[i].getValue()+"\"")+",\n";
 		}
-		out = out+spacing+"\""+list[list.length-1].getTitle()+"\": "+((list[list.length-1].getValue().substring(0, 1)=="{")?
-				list[list.length-1].getValue():"\""+list[list.length-1].getValue()+"\"")+"\n}";
+		out = out+spacing+"\""+list[list.length-1].getTitle()+"\": "+((list[list.length-1].getValue().substring(0, 1)
+				.equals("{"))? addSpacing(list[list.length-1].getValue()):"\""+list[list.length-1].getValue()+"\"")+"\n}";
 		return out;
+	}
+	
+	/**
+	 * "tabs" out a multi-line string
+	 * @param value the String to be spaced
+	 * @return the spaced String
+	 */
+	private static String addSpacing(String value) {
+		return value.replace("\n", "\n"+spacing);
+	}
+	
+	/**
+	 * "untabs" out a multi-line string
+	 * @param value the String to be unspaced
+	 * @return the unspaced String
+	 */
+	private static String removeSpacing(String value) {
+		return value.replace("\n"+spacing, "\n");
+	}
+	
+	/**
+	 * gets the linked file and creates objects out of it
+	 * @return the list of all the objects
+	 * @throws NotAJsonFileException Thrown if the file is not in Json file format
+	 */
+	public JsonObject[] getObjects() throws NotAJsonFileException {
+		byte[] encoded = null;
+		try {
+			encoded = Files.readAllBytes(file.toPath());
+		} catch (IOException e) { e.printStackTrace(); }
+		return getListFromString(new String(encoded));
 	}
 	
 	/**
@@ -67,6 +107,7 @@ public class Json{
 			input.close();
 			throw new NotAJsonFileException(); //makes sure it's a Json File
 		}
+		line = input.next();
 		/*end set up*/
 		while (input.hasNext()) {
 			//"line = input.next();" is at the end of the loop
@@ -77,9 +118,11 @@ public class Json{
 			int center = line.indexOf("\": "); //I used it 3+ times so i thought i might as well make a var..
 			String title = line.substring(line.indexOf("\"")+1, center); //everything within the first ""
 			String value = "";
+			JsonObject currObj = null;
 			if(line.charAt(center+3)=='\"') {
 				value = line.substring(center+4, line.indexOf("\"", center+5)); //last ""
 				line = input.next();
+				currObj = new JsonObject(title, value);
 			} else {
 				value = "{\n";
 				line = input.next();
@@ -87,8 +130,11 @@ public class Json{
 					value = value+line+"\n";
 					line = input.next();
 				}
+				if(value.charAt(value.length()-2)==',') value = value.substring(0, value.length()-2);
+				value = removeSpacing(value);
+				currObj = (JsonObject) new JsonArray(title, value);
 			}
-			array.add(new JsonObject(title, value));
+			array.add(currObj);
 		}
 		input.close();
 		JsonObject[] j = new JsonObject[array.size()];
@@ -105,5 +151,17 @@ public class Json{
 		list = objects.toArray(list);
 		out.print(getFileFromList(list));
 		out.close();
+	}
+	
+	private void clearFile() {
+		if(file.exists()) {
+			try {
+				PrintWriter out = new PrintWriter(file);
+				out.print("");
+				out.close();
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }
