@@ -25,6 +25,13 @@ public class Json{
 	 */
 	public Json(File f) {
 		file = f;
+		try {
+			JsonObject[] listObj = getObjects();
+			for (JsonObject j : listObj) objects.add(j);
+		} catch (NotAJsonFileException e) {
+			clearFile();
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -144,5 +151,17 @@ public class Json{
 		list = objects.toArray(list);
 		out.print(getFileFromList(list));
 		out.close();
+	}
+	
+	private void clearFile() {
+		if(file.exists()) {
+			try {
+				PrintWriter out = new PrintWriter(file);
+				out.print("");
+				out.close();
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }
