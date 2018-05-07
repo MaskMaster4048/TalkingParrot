@@ -40,6 +40,11 @@ public class Json{
 	 */
 	public void add(JsonObject j) {
 		objects.add(j);
+		try {
+			writeToFile();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -96,7 +101,7 @@ public class Json{
 	 * @return A JsonObject list
 	 * @throws NotAJsonFileException Thrown if the string is not in Json file format
 	 */
-	public static JsonObject[] getListFromString(String s) throws NotAJsonFileException {
+	protected static JsonObject[] getListFromString(String s) throws NotAJsonFileException {
 		ArrayList<JsonObject> array = new ArrayList<JsonObject>();
 		short WSPC = (short) spacing.length(); //the amount of white
 		/*setting up to read and making sure that it's a Json File before continuing*/
@@ -145,7 +150,7 @@ public class Json{
 	 * Writes to the given file
 	 * @throws FileNotFoundException if the file given is not found
 	 */
-	public void WriteToFile() throws FileNotFoundException {
+	private void writeToFile() throws FileNotFoundException {
 		PrintWriter out = new PrintWriter(file);
 		JsonObject[] list = new JsonObject[objects.size()];
 		list = objects.toArray(list);
@@ -164,4 +169,5 @@ public class Json{
 			}
 		}
 	}
+
 }
