@@ -32,7 +32,7 @@ public class JsonArray extends JsonObject{
 	/**
 	 * @return the list
 	 */
-	public JsonObject[] get() {
+	public JsonObject[] getChildren() {
 		return list;
 	}
 
@@ -48,6 +48,7 @@ public class JsonArray extends JsonObject{
 	 * Adds an object to the end of the array in emergency cases
 	 * @param j the JsonObject to be added
 	 */
+	@Deprecated
 	public void addToList(JsonObject j) {
 		JsonObject[] oldList = list;
 		list = new JsonObject[oldList.length+1];
