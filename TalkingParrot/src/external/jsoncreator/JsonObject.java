@@ -128,6 +128,10 @@ public class JsonObject {
 		this.value = value;
 	}
 	
+	/**
+	 * gets children in the object, separates the Objects from the Arrays
+	 * @return children in the object, if applicable
+	 */
 	public JsonObject[] getChildren() {
 		return null;
 	}

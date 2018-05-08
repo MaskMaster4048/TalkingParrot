@@ -20,6 +20,11 @@ public class JsonArray extends JsonObject{
 		list = l;
 	}
 	
+	/**
+	 * creates a JsonArray
+	 * @param t The title of the JsonArray
+	 * @param v The value of the JsonArray
+	 */
 	protected JsonArray(String t, String v) {
 		super(t,v);
 		try {

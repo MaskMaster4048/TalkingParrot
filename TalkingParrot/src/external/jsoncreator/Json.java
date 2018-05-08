@@ -173,6 +173,9 @@ public class Json{
 		out.close();
 	}
 	
+	/**
+	 * clears the connected file
+	 */
 	private void clearFile() {
 		if(file.exists()) {
 			try {
