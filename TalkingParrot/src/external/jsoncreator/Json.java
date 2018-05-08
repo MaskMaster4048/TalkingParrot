@@ -35,6 +35,21 @@ public class Json{
 	}
 	
 	/**
+	 * creating the Json file
+	 * @param f The name of the file to be written/read
+	 */
+	public Json(String f) {
+		file = new File(f);
+		try {
+			JsonObject[] listObj = getObjects();
+			for (JsonObject j : listObj) objects.add(j);
+		} catch (NotAJsonFileException e) {
+			clearFile();
+			e.printStackTrace();
+		}
+	}
+	
+	/**
 	 * adds a JsonObject into the "uncompiled" list of items
 	 * @param j The JsonObject to be added
 	 */
