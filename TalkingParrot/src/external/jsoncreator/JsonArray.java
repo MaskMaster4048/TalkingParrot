@@ -63,8 +63,10 @@ public class JsonArray extends JsonObject{
 	}
 	
 	public Json getAsJson() {
+		if (list == null) return new Json();
 		Json out = new Json();
-		for(JsonObject j:list) out.add(j);
+		out.title = this.title;
+		for(JsonObject j:list) out.objects.add(j);
 		return out;
 	}
 }

@@ -16,7 +16,7 @@ import java.util.Scanner;
  */
 public class Json{
 	private File file;
-	private ArrayList<JsonObject> objects = new ArrayList<JsonObject>();
+	protected ArrayList<JsonObject> objects = new ArrayList<JsonObject>();
 	private final static String spacing = "    ";
 	
 	/**
@@ -60,7 +60,9 @@ public class Json{
 	 * @param j The JsonObject to be added
 	 */
 	public void add(JsonObject j) {
-		objects.add(j);
+		if(getObjectPos(j.title)==-1) objects.add(j);
+		else if(j.getChildren()!=null) update((JsonArray) j);
+		else objects.set(getObjectPos(j.title), j);
 		if(title != null) master.update(new JsonArray(title, objects.toArray(new JsonObject[0])));
 		else try {
 			writeToFile();
@@ -84,13 +86,19 @@ public class Json{
 	}
 	
 	/**
-	 * gets a string representing the title of the item in the Json File
+	 * Gets a string representing the title of the item in the Json File
 	 * @param title The title in the Json File
 	 * @return the value of the 
 	 */
-
-	public JsonObject getValueByName(String title) {
-		return objects.get(getObjectPos(title));
+	public String getValueByName(String title) {
+		if(title.indexOf('.')==-1) return objects.get(getObjectPos(title)).value;
+		try {
+			return ((JsonArray)(objects.get(getObjectPos(title.substring(0, title.indexOf('.'))))))
+					.getAsJson().getValueByName(title.substring(title.indexOf('.')+1));
+		}catch(ClassCastException e) {
+			e.printStackTrace();
+			throw new RuntimeException("String \'title\' does not exist in the file");
+		}
 	}
 
 	/**
@@ -134,9 +142,10 @@ public class Json{
 			} else {
 				value = "{\n";
 				line = input.next();
-				while (line.indexOf("\"") != WSPC) {
+				while (line.indexOf("\"") != WSPC && !line.equals("}")) {
 					value = value+line+"\n";
-					line = input.next();
+					if(input.hasNext()) line = input.next();
+					else break;
 				}
 				if(value.charAt(value.length()-2)==',') value = value.substring(0, value.length()-2);
 				value = removeSpacing(value);
@@ -227,7 +236,7 @@ public class Json{
 	
 	/* things needed only for nested Json files */
 	private Json master;
-	private String title;
+	protected String title;
 
 	/**
 	 * creates a Json file
