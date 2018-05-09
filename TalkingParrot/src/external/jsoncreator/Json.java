@@ -20,26 +20,32 @@ public class Json{
 	private final static String spacing = "    ";
 	
 	/**
-	 * creating the Json file
-	 * @param f The file to be written/read
+	 * Blank constructor
 	 */
-	public Json(File f) {
-		file = f;
+	Json() {}
+
+	/**
+	 * creates a Json file
+	 * @param f The name of the file to be written/read
+	 */
+	public Json(String f) {
+		file = new File(f);
 		try {
 			JsonObject[] listObj = getObjects();
+			if(listObj == null) return;
 			for (JsonObject j : listObj) objects.add(j);
 		} catch (NotAJsonFileException e) {
 			clearFile();
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
-	 * creating the Json file
-	 * @param f The name of the file to be written/read
+	 * creates a Json file
+	 * @param f The file to be written/read
 	 */
-	public Json(String f) {
-		file = new File(f);
+	public Json(File f) {
+		file = f;
 		try {
 			JsonObject[] listObj = getObjects();
 			for (JsonObject j : listObj) objects.add(j);
@@ -55,46 +61,12 @@ public class Json{
 	 */
 	public void add(JsonObject j) {
 		objects.add(j);
-		try {
+		if(title != null) master.update(new JsonArray(title, objects.toArray(new JsonObject[0])));
+		else try {
 			writeToFile();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
-	}
-	
-	/**
-	 * Gets a JsonObject[] and turns it into a string representing how it would be laid out like in a Json file
-	 * used before writing the file
-	 * @param list the list of JsonObjects
-	 * @return A string representing a Json file
-	 */
-	protected static String getFileFromList(JsonObject[] list) {
-		String out = "{\n";
-		for (int i=0; i<list.length-1; i++) {//saves the last one, because the format is different (no comma)
-			out = out+spacing+"\""+list[i].getTitle()+"\": "+((list[i].getValue().substring(0, 1).equals("{"))?
-					addSpacing(list[i].getValue()):"\""+list[i].getValue()+"\"")+",\n";
-		}
-		out = out+spacing+"\""+list[list.length-1].getTitle()+"\": "+((list[list.length-1].getValue().substring(0, 1)
-				.equals("{"))? addSpacing(list[list.length-1].getValue()):"\""+list[list.length-1].getValue()+"\"")+"\n}";
-		return out;
-	}
-	
-	/**
-	 * "tabs" out a multi-line string
-	 * @param value the String to be spaced
-	 * @return the spaced String
-	 */
-	private static String addSpacing(String value) {
-		return value.replace("\n", "\n"+spacing);
-	}
-	
-	/**
-	 * "untabs" out a multi-line string
-	 * @param value the String to be unspaced
-	 * @return the unspaced String
-	 */
-	private static String removeSpacing(String value) {
-		return value.replace("\n"+spacing, "\n");
 	}
 	
 	/**
@@ -107,9 +79,20 @@ public class Json{
 		try {
 			encoded = Files.readAllBytes(file.toPath());
 		} catch (IOException e) { e.printStackTrace(); }
+		if (encoded == null) return null;
 		return getListFromString(new String(encoded));
 	}
 	
+	/**
+	 * gets a string representing the title of the item in the Json File
+	 * @param title The title in the Json File
+	 * @return the value of the 
+	 */
+
+	public JsonObject getValueByName(String title) {
+		return objects.get(getObjectPos(title));
+	}
+
 	/**
 	 * Gets a JsonObject list from a string in Json file format
 	 * @param s The string in Json file format
@@ -122,7 +105,12 @@ public class Json{
 		/*setting up to read and making sure that it's a Json File before continuing*/
 		Scanner input = new Scanner(s);
 		input.useDelimiter("\n"); //sets the scanner to output a line at a time
-		String line = input.next(); //get's the first line (should be "{" if it's a Json file)
+		String line = null;
+		if(input.hasNext())	line = input.next(); //get's the first line (should be "{" if it's a Json file)
+		else {
+			input.close();
+			return null;
+		}
 		if(!line.equals("{")) {
 			input.close();
 			throw new NotAJsonFileException(); //makes sure it's a Json File
@@ -160,7 +148,55 @@ public class Json{
 		JsonObject[] j = new JsonObject[array.size()];
 		return array.toArray(j);
 	}
+
+	/**
+	 * Gets a JsonObject[] and turns it into a string representing how it would be laid out like in a Json file
+	 * used before writing the file
+	 * @param list the list of JsonObjects
+	 * @return A string representing a Json file
+	 */
+	protected static String getFileFromList(JsonObject[] list) {
+		String out = "{\n";
+		for (int i=0; i<list.length-1; i++) {//saves the last one, because the format is different (no comma)
+			out = out+spacing+"\""+list[i].getTitle()+"\": "+((list[i].getValue().substring(0, 1).equals("{"))?
+					addSpacing(list[i].getValue()):"\""+list[i].getValue()+"\"")+",\n";
+		}
+		out = out+spacing+"\""+list[list.length-1].getTitle()+"\": "+((list[list.length-1].getValue().substring(0, 1)
+				.equals("{"))? addSpacing(list[list.length-1].getValue()):"\""+list[list.length-1].getValue()+"\"")+"\n}";
+		return out;
+	}
 	
+	/**
+	 * "tabs" out a multi-line string
+	 * @param value the String to be spaced
+	 * @return the spaced String
+	 */
+	private static String addSpacing(String value) {
+		return value.replace("\n", "\n"+spacing);
+	}
+	
+	/**
+	 * "untabs" out a multi-line string
+	 * @param value the String to be unspaced
+	 * @return the unspaced String
+	 */
+	private static String removeSpacing(String value) {
+		return value.replace("\n"+spacing, "\n");
+	}
+	
+	/**
+	 * Gets the position of an object in the list of objects in the Json file.
+	 * @param title The title of the object to be found
+	 * @return The position of the object in the list <br> returns -1 if the object is not in the list
+	 */
+	private int getObjectPos(String title) {
+		for(int i=0; i<objects.size();i++) {
+			if(!objects.get(i).title.equals(title)) continue;
+			return i;
+		}
+		return -1;
+	}
+
 	/**
 	 * Writes to the given file
 	 * @throws FileNotFoundException if the file given is not found
@@ -188,4 +224,38 @@ public class Json{
 		}
 	}
 
+	
+	/* things needed only for nested Json files */
+	private Json master;
+	private String title;
+
+	/**
+	 * creates a Json file
+	 * @param master the master Json File
+	 * @param title The title to be used 
+	 */
+	protected Json(Json master, String title) {
+		this.master = master;
+		this.title = title;
+	}
+
+	/**
+	 * returns the title of this Json file, if applicable.
+	 * @return the title
+	 */
+	public String getTitle() {
+		return title;
+	}
+
+	/**
+	 * finds a JsonArray with the same title and updates the contents of it
+	 * @param j the new JsonArray
+	 */
+	private void update(JsonArray j) {
+		int i = getObjectPos(j.title);
+		if(i!=-1) objects.set(i, (JsonObject)j);
+		else objects.add(j);
+	}
+	
+	/* end 'things needed only for nested Json files' */
 }

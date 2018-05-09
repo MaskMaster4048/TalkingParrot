@@ -35,13 +35,6 @@ public class JsonArray extends JsonObject{
 	}
 
 	/**
-	 * @return the list
-	 */
-	public JsonObject[] getChildren() {
-		return list;
-	}
-
-	/**
 	 * @param list The list to set
 	 */
 	public void setList(JsonObject[] l) {
@@ -60,5 +53,18 @@ public class JsonArray extends JsonObject{
 		System.arraycopy(oldList, 0, list, 0, oldList.length);
 		list[oldList.length] = j;
 		value = Json.getFileFromList(list);
+	}
+
+	/**
+	 * @return the list
+	 */
+	public JsonObject[] getChildren() {
+		return list;
+	}
+	
+	public Json getAsJson() {
+		Json out = new Json();
+		for(JsonObject j:list) out.add(j);
+		return out;
 	}
 }
